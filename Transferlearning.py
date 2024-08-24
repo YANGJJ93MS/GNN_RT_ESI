@@ -208,7 +208,7 @@ if __name__ == "__main__":
     decay_interval=10
     iteration_tf=1600
     N=1000
-    path='/data/'
+    path='./data/'
     dataname='TF1'
     if torch.cuda.is_available():
         device = torch.device('cuda')
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     print('The code uses a CPU!')
     data=pd.read_csv(path+'TF1.csv')
     x=list(data['smiles'])
-    y=list(data['rts'])
+    y=list(data['RT'])
     index = [i for i in range(len(x))]
     random.shuffle(index)
     X,Y=[],[]
@@ -260,9 +260,10 @@ if __name__ == "__main__":
     print('-'*100)
     print('Creating a model.')
     torch.manual_seed(1234)
+    N=5000
     model= MolecularGraphNeuralNetwork(
             N, dim, layer_hidden, layer_output).to(device)
-    file_model=path+'SMRT_model'+'.h5'
+    file_model=path+'model'+'.h5'
     model.load_state_dict(torch.load(file_model, map_location=torch.device('cpu')))
     for para in model.W_fingerprint.parameters():
         para.requires_grad = False   
